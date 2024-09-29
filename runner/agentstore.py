@@ -34,7 +34,7 @@ class AgentStore:
             agent_spec = agent.get_specification()
 
             # write the json to file
-            with open(f'agents/save_state/{agent.get_name()}.json', 'w') as f:
+            with open(f'agents/save_state/{agent.get_name().replace(' ', '').lower()}.json', 'w') as f:
                 f.write(agent_spec)
 
     def find(self, agent_name):

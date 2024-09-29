@@ -5,9 +5,9 @@ from typing import List
 from tools import AgentTool
 
 
-def load_prompt(filename):
-    logging.debug(f'Loading prompt: {filename}')
-    with open(f'prompts/{filename}') as f:
+def load_prompt(agent_name):
+    logging.debug(f'Loading prompt for {agent_name} agent')
+    with open(f'agents/{agent_name}/{agent_name}.json') as f:
         return json.load(f)
 
 
@@ -64,8 +64,8 @@ class Agent:
         self.__tools.append(tool)
 
     def __assemble_system_prompt(self):
-        generic_prompt = load_prompt('generic.json')
-        agent_prompt = load_prompt(f'{self.name.replace(' ', '').lower()}.json')
+        generic_prompt = load_prompt('base')
+        agent_prompt = load_prompt(f'{self.name.replace(' ', '').lower()}')
         tool_prompt = self.__assemble_tool_prompt()
 
         # merge the 'instructions' from the generic prompt with the agent prompt
@@ -83,3 +83,4 @@ class Agent:
                     'You have the following tools available to complete the task:',
                 ] + [tool.get_instructions() for tool in self.__tools]
         }
+
