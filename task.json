@@ -1,0 +1,27 @@
+{
+  "name": "task",
+  "version": "1.0.0",
+  "description": "JAAMS Task Definition File",
+  "inputs": [
+    {
+      "task-description": {
+        "type": "text",
+        "description": "Design and implement a twitter clone using react and js for the frontend, and python for the backend rest api."
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "asset": {
+        "type": "files",
+        "description": "The source code for the frontend artifact in ./src/frontend directory"
+      }
+    },
+    {
+      "asset": {
+        "type": "files",
+        "description": "The source code for the backend artifact in ./src/backend directory"
+      }
+    }
+  ]
+}

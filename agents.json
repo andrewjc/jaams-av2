@@ -1,0 +1,79 @@
+{
+  "runtime": {
+    "info": [
+      "The following is a list of agents that can be used to execute tasks by the manager.",
+      "The manager will use the agent to execute the task.",
+      "The agent will be responsible for executing the task and providing the output."
+    ]
+  },
+  "agents": [
+    {
+      "agent": {
+        "name": "Manager",
+        "model": "Llama-3.2-90b-Text-Preview",
+        "description": "The manager agent is responsible for delegating tasks to other agents, and coordinating results.",
+        "inputs": [
+          {
+            "task": {
+              "type": "text",
+              "description": "A JAAMS Task Definition File."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "agent": {
+        "name": "Planner",
+        "model": "Llama-3.2-90b-Text-Preview",
+        "description": "The planner agent is responsible for planning the execution of tasks.",
+        "inputs": [
+          {
+            "task": {
+              "type": "text",
+              "description": "A JAAMS Task Definition File."
+            }
+          }
+        ],
+        "outputs": [
+          {
+            "plan": {
+              "type": "text",
+              "description": "A JAAMS Plan Definition File.",
+              "location": "./src/plans",
+              "format": "json",
+              "example": {
+                "name": "plan",
+                "description": "JAAMS Plan Definition File",
+                "tasks": [
+                  {
+                    "task": {
+                      "type": "agent-task",
+                      "agent": "Business Analysis",
+                      "description": "A JAAMS Task Definition File."
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "agent": {
+        "name": "Business Analysis",
+        "model": "Llama-3.2-90b-Text-Preview",
+        "description": "The manager agent is responsible for delegating tasks to other agents, and coordinating results.",
+        "inputs": [
+          {
+            "task": {
+              "type": "text",
+              "description": "A JAAMS Task Definition File."
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
