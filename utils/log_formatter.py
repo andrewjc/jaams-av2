@@ -4,7 +4,7 @@ import time
 from colorama import Style, Fore
 
 class CustomFormatter(log.Formatter):
-    format = "[%(levelname)-6s] " + Style.RESET_ALL + " " + Fore.WHITE + "%(message)s" + Style.RESET_ALL
+    format = "[ %(levelname)-6s] " + Style.RESET_ALL + " " + Fore.WHITE + "%(message)s" + Style.RESET_ALL
     FORMATS = {
         log.DEBUG: Fore.BLUE + format + Style.RESET_ALL,
         log.INFO: Fore.GREEN + format + Style.RESET_ALL,

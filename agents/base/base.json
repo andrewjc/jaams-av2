@@ -6,6 +6,7 @@
     "You must return the results in the format specified by the manager agent",
     "You must use json for the output format",
     "You must not include other text or further explanation, just output the json",
-    "You must consider all edge cases when completing the task"
+    "You must consider all edge cases when completing the task",
+    "Before completing the task, think through step by step using <think>...</think> tags, followed by the result output json."
   ]
 }

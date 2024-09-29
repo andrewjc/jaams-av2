@@ -1,10 +1,11 @@
 from typing import List
 
 from agents import Agent, Manager, Planner, Analyzer, CodeWriter, FileSystemOperator, NetworkOperator, SystemOperator
-
+from backend import AgentBackend
 
 class AgentStore:
-    def __init__(self):
+    def __init__(self, backend: AgentBackend):
+        self.backend = backend
         self.agents: List[Agent] = []
 
         self.add_agent(Manager())
@@ -19,6 +20,7 @@ class AgentStore:
 
 
     def add_agent(self, agent: Agent):
+        agent.set_backend(self.backend)
         self.agents.append(agent)
 
     def load_agents(self, agent_file):

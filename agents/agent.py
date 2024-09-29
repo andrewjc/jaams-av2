@@ -2,22 +2,25 @@ import json
 import logging
 from typing import List
 
+from backend import AgentBackend
+from backend import DEFAULT_AGENT_BACKEND
+from runner.usertask import UserTask
 from tools import AgentTool
 
-
 def load_prompt(agent_name):
-    logging.debug(f'Loading prompt for {agent_name} agent')
     with open(f'agents/{agent_name}/{agent_name}.json') as f:
         return json.load(f)
 
-
 class Agent:
     def __init__(self):
+        self.__backend: AgentBackend = DEFAULT_AGENT_BACKEND
+        self.__tools: List[AgentTool] = []
+
+        self.model = None
         self.name = None
-        self.task_queue = []
+        self.active_task: UserTask | None = None
         self.status = "stopped"
         self.result = None
-        self.__tools: List[AgentTool] = []
 
     def start(self):
         self.__assemble_system_prompt()
@@ -35,19 +38,22 @@ class Agent:
         pass
 
     def execute_task(self):
-        pass
+        # assemble the prompt and the task
+        task_prompt = self.__assemble_task_prompt()
+        self.__backend.execute_task(self.model, task_prompt)
+
 
     def get_task_queue(self):
         pass
 
     def get_task(self):
-        pass
+        return self.active_task
 
-    def add_task(self, task):
-        pass
+    def set_task(self, task):
+        self.active_task = task
 
     def remove_task(self):
-        pass
+        self.active_task = None
 
     def get_task_status(self):
         pass
@@ -64,6 +70,7 @@ class Agent:
         self.__tools.append(tool)
 
     def __assemble_system_prompt(self):
+        logging.debug(f'Loading prompt for {self.name.replace(' ', '').lower()} agent')
         generic_prompt = load_prompt('base')
         agent_prompt = load_prompt(f'{self.name.replace(' ', '').lower()}')
         tool_prompt = self.__assemble_tool_prompt()
@@ -73,7 +80,16 @@ class Agent:
         self.responsibilities = agent_prompt['responsibilities']
 
     def __assemble_task_prompt(self):
-        pass
+        task_prompt = {
+            'instructions': self.instructions,
+            'task': [
+                'You have been assigned a task to complete. The task is as follows:',
+                self.active_task.to_json(),
+                'Please complete the task and return the result in the requested format.'
+            ]
+        }
+
+        return json.dumps(task_prompt)
 
     def __assemble_tool_prompt(self):
         return {
@@ -83,4 +99,7 @@ class Agent:
                     'You have the following tools available to complete the task:',
                 ] + [tool.get_instructions() for tool in self.__tools]
         }
+
+    def set_backend(self, backend: AgentBackend):
+        self.__backend = backend
 

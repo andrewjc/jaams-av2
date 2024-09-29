@@ -7,6 +7,8 @@ import logging as log
 import time
 from colorama import init
 
+from backend import GroqBackend
+
 from runner.agentstore import AgentStore
 from runner.task_runner import TaskRunner
 from utils import CustomFormatter
@@ -26,13 +28,21 @@ def bootstrap():
     logger.info('Just Another Agent Management System')
     logger.info("Initializing...")
 
-    agent_store = AgentStore()
+    backend = GroqBackend()
+
+    agent_store = AgentStore(backend)
     agent_store.load_agents('agents.json')
 
     task_runner = TaskRunner(agent_store)
     task_runner.run('task.json')
 
     logger.info("Running...")
+    while True:
+        task_runner.step()
+
+
+        time.sleep(1)
+
 
 if __name__ == '__main__':
     bootstrap()

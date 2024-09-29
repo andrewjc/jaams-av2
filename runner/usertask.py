@@ -7,6 +7,12 @@ class TaskInputType:
         self.input_type = spec['type']
         self.description = spec['description']
 
+    def to_json(self):
+        return {
+            "type": self.input_type,
+            "description": self.description
+        }
+
 
 class TaskOutputAsset:
     def __init__(self, spec):
@@ -17,6 +23,14 @@ class TaskOutputAsset:
 class TaskOutputType:
     def __init__(self, spec):
         self.asset = TaskOutputAsset(spec['asset'])
+
+    def to_json(self):
+        return {
+            "asset": {
+                "type": self.asset.asset_type,
+                "description": self.asset.description
+            }
+        }
 
 
 class UserTask:
@@ -40,3 +54,10 @@ class UserTask:
         assert len(self.task_source['outputs']) > 0
         self.inputs = [TaskInputType(src) for src in self.task_source['inputs']]
         self.outputs = [TaskOutputType(src) for src in self.task_source['outputs']]
+
+    def to_json(self):
+        struct = {
+            "inputs": [inp.to_json() for inp in self.inputs],
+            "outputs": [out.to_json() for out in self.outputs]
+        }
+        return json.dumps(struct)
