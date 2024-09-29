@@ -4,10 +4,8 @@
   "description": "JAAMS Task Definition File",
   "inputs": [
     {
-      "task-description": {
-        "type": "text",
-        "description": "Design and implement a twitter clone using react and js for the frontend, and python for the backend rest api."
-      }
+      "type": "text",
+      "description": "Design and implement a twitter clone using react and js for the frontend, and python for the backend rest api."
     }
   ],
   "outputs": [

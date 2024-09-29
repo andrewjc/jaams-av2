@@ -43,7 +43,7 @@ class Agent:
     def get_task(self):
         pass
 
-    def add_task(self):
+     def add_task(self, task):
         pass
 
     def remove_task(self):
