@@ -83,9 +83,9 @@ class Agent:
         task_prompt = {
             'instructions': self.instructions,
             'task': [
-                'You have been assigned a task to complete. The task is as follows:',
+                'The user task is as follows:',
                 self.active_task.to_json(),
-                'Please complete the task and return the result in the requested format.'
+                'Delegate or complete the task using the tools available to you.'
             ]
         }
 
@@ -97,7 +97,10 @@ class Agent:
                 [
                     'Invoke a tool using <tool name="Tool Name" argument1="value" argument2="value" ... argumentn="value" />'
                     'You have the following tools available to complete the task:',
-                ] + [tool.get_instructions() for tool in self.__tools]
+                ] + [tool.get_instructions() for tool in self.__tools] + [
+                    "You may only invoke one tool at a time.",
+                    "After invoking a tool, you must wait for the result before invoking another tool."
+                ]
         }
 
     def set_backend(self, backend: AgentBackend):

@@ -8,4 +8,4 @@ class AgentEvaluator(AgentTool):
         self.description = "Use this tool to evaluate capabilities and purpose of other agents, and to determine the best agent for a given task"
 
     def get_instructions(self):
-        return self.name + " - " + self.description
+        return self.name + " - " + self.description + " - example: <tool name=\\\"Agent Evaluator\\\" argument1=\\\"all or agent-name\\\" />"
