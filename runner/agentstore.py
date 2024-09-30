@@ -21,7 +21,11 @@ class AgentStore:
 
     def add_agent(self, agent: Agent):
         agent.set_backend(self.backend)
+        agent.set_store(self)
         self.agents.append(agent)
+
+    def get_agents(self) -> List[Agent]:
+        return self.agents
 
     def load_agents(self, agent_file):
         pass

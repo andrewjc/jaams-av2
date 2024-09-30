@@ -4,6 +4,7 @@ from typing import List
 
 from backend import AgentBackend
 from backend import DEFAULT_AGENT_BACKEND
+from runner.tool_processor import ToolProcessor
 from runner.usertask import UserTask
 from tools import AgentTool
 
@@ -14,7 +15,8 @@ def load_prompt(agent_name):
 class Agent:
     def __init__(self):
         self.__backend: AgentBackend = DEFAULT_AGENT_BACKEND
-        self.__tools: List[AgentTool] = []
+        self.__tool_processor: ToolProcessor | None = ToolProcessor()
+        self.__store = None
 
         self.model = None
         self.name = None
@@ -40,8 +42,12 @@ class Agent:
     def execute_task(self):
         # assemble the prompt and the task
         task_prompt = self.__assemble_task_prompt()
-        self.__backend.execute_task(self.model, task_prompt)
-
+        response = self.__backend.execute_task(self.model, task_prompt)
+        if self.__tool_processor(response):
+            # there's tool output
+            response = self.__backend.execute_task(self.model, task_prompt + response + self.__tool_processor.get_last_tool_result())
+        self.result = response
+        return 'complete'
 
     def get_task_queue(self):
         pass
@@ -67,7 +73,8 @@ class Agent:
         return json.dumps(spec)
 
     def add_tool(self, tool: AgentTool):
-        self.__tools.append(tool)
+        tool.set_agent(self)
+        self.__tool_processor.add_tool(tool)
 
     def __assemble_system_prompt(self):
         logging.debug(f'Loading prompt for {self.name.replace(' ', '').lower()} agent')
@@ -97,7 +104,7 @@ class Agent:
                 [
                     'Invoke a tool using <tool name="Tool Name" argument1="value" argument2="value" ... argumentn="value" />'
                     'You have the following tools available to complete the task:',
-                ] + [tool.get_instructions() for tool in self.__tools] + [
+                ] + [tool.get_instructions() for tool in self.__tool_processor.get_tools()] + [
                     "You may only invoke one tool at a time.",
                     "After invoking a tool, you must wait for the result before invoking another tool."
                 ]
@@ -105,4 +112,13 @@ class Agent:
 
     def set_backend(self, backend: AgentBackend):
         self.__backend = backend
+
+    def __getstate__(self):
+        return {k: v for k, v in self.__dict__.items() if not k.startswith('_Agent__')}
+
+    def get_store(self):
+        return self.__store
+
+    def set_store(self, agent_store):
+        self.__store = agent_store
 

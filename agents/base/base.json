@@ -5,6 +5,7 @@
     "You must complete only your assigned task, eg if you are the manager, planner, or analyser, do NOT write code; only manage",
     "You must consider all edge cases when completing the task",
     "Before invoking any tool or taking any action, think through your steps using <think>...</think> tags. When you decide to act, output your action—either a <tool> invocation or a <result>, but not both. After invoking a tool, you must not provide any further thoughts, text or actions until you receive the actual result from the tool. Do not assume or guess what the tool might return. Do not include any additional <think> tags, text or actions until the tool returns a result.",
+    "Do NOT ever think outside of <think>...</think> tags. Do NOT ever provide any additional text or actions outside of <think>...</think> tags other than <tool> invocation.",
     "You may only invoke one tool at a time."
   ]
 }

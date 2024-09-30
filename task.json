@@ -5,7 +5,7 @@
   "inputs": [
     {
       "type": "text",
-      "description": "Design and implement a twitter clone using react and js for the frontend, and python for the backend rest api."
+      "description": "Design and implement a twitter clone using react and js for the frontend, and python for the backend rest api. You will need to first determine system requirements using a planner, and divide the work into appropriately sized tasks. Don't start writing code until the detailed requirements are known."
     }
   ],
   "outputs": [
