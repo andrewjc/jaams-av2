@@ -34,21 +34,35 @@ class TaskOutputType:
 
 
 class UserTask:
-    def __init__(self, task_file):
+    def __init__(self):
         self.task_source = None
         self.inputs: List[TaskInputType] = []
         self.outputs: List[TaskOutputType] = []
-        self.parse_task_file(task_file)
+
+    @staticmethod
+    def from_file(task_file):
+        user_task = UserTask()
+        user_task.parse_task_file(task_file)
+        return user_task
+
+    @staticmethod
+    def from_json(json_string):
+        user_task = UserTask()
+        user_task.parse_task_json(json_string)
+        return user_task
 
     def parse_task_file(self, task_file):
-        # open the task_file and parse json to objects
         with open(task_file) as f:
             self.task_source = json.load(f)
+        self._parse_task_source()
 
-        # santity check
+    def parse_task_json(self, json_string):
+        self.task_source = json.loads(json_string)
+        self._parse_task_source()
+
+    def _parse_task_source(self):
         assert self.task_source is not None
         assert self.task_source['version'] == '1.0.0'
-        assert self.task_source['name'] == 'task'
         assert self.task_source['description'] == "JAAMS Task Definition File"
         assert len(self.task_source['inputs']) > 0
         assert len(self.task_source['outputs']) > 0

@@ -10,7 +10,7 @@ class TaskRunner:
         self.agent_store = agent_store
 
     def run(self, task_file):
-        self.active_user_task = UserTask(task_file)
+        self.active_user_task = UserTask.from_file(task_file)
 
         # give the task to the manager
         manager = self.agent_store.find('Manager')

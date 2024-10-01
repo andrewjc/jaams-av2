@@ -42,10 +42,17 @@ class Agent:
     def execute_task(self):
         # assemble the prompt and the task
         task_prompt = self.__assemble_task_prompt()
-        response = self.__backend.execute_task(self.model, task_prompt)
-        if self.__tool_processor(response):
-            # there's tool output
-            response = self.__backend.execute_task(self.model, task_prompt + response + self.__tool_processor.get_last_tool_result())
+
+        response = None
+        is_complete = False
+        backend_input = task_prompt
+        while not is_complete:
+            response = self.__backend.execute_task(self.model, backend_input)
+            if self.__tool_processor(response):
+                backend_input = task_prompt + response + self.__tool_processor.get_last_tool_result()
+            else:
+                is_complete = True
+
         self.result = response
         return 'complete'
 

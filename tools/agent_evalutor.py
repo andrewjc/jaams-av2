@@ -13,7 +13,7 @@ class AgentEvaluator(AgentTool):
         return self.name + " - " + self.description + " - example: <tool name=\\\"Agent Evaluator\\\" argument1=\\\"all or agent-name\\\" />"
 
     def match(self, response: str) -> bool:
-        return response.index("<tool name=\"Agent Evaluator\"") > -1
+        return "<tool name=\"Agent Evaluator\"" in response
 
     def execute(self, response: str):
         # extract the tool line
